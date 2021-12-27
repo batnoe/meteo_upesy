@@ -16,6 +16,7 @@
 #include <Wire.h>
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
+float humidite;
 long temps;
 
 typedef struct struct_message {
@@ -102,10 +103,10 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawFloat(temp + 0.5, 1, 210, 15, 6);         //temp_in -3.7 TFT 2.8
   myGLCD.drawNumber(pres/100+18, 200, 170, 6);
   myGLCD.drawNumber(hum + 4, 220, 250, 6);
-  if (mq2 > 125) {myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawNumber(mq2, 220, 90, 6); }
+  /*if (mq2 > 125) {myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawNumber(mq2, 220, 90, 6); }
   else if (mq2 > mq2_old + 10 || mq2 > 400) {myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawNumber(mq2, 220, 90, 6); }
   else {myGLCD.setTextColor(TFT_VIOLET,TFT_BLACK); myGLCD.drawNumber(mq2, 220, 90, 6); }
-  mq2_old = mq2;
+  mq2_old = mq2; */
     temps = millis() ;}       //  delay (1000*60);
 }                               
 // --------------- Fin de la loop -----------------
@@ -116,6 +117,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   humidite = myData.d;
    if (temp_ext > t_max) {t_max = temp_ext;} else if(temp_ext < t_min and t_min > -30 and temp_ext > -50) {t_min = temp_ext;}    // -------- calcul mini et maxi température extérieur ---------------
   myGLCD.setTextColor(TFT_RED,TFT_BLACK);
+  myGLCD.drawNumber(humidite, 220, 90, 6);
   //if (temp_ext < 10)  { myGLCD.drawFloat(temp_ext, 1, 220, 90, 6); } else { myGLCD.drawFloat(temp_ext, 1, 210, 90, 6); }  // affiche température extérieur
   //myGLCD.setTextColor(TFT_WHITE,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 150, 80, 5); myGLCD.drawFloat(t_min, 1, 150, 110, 5);  //affiche mini maxi
 
