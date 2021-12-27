@@ -20,7 +20,7 @@ long temps;
 
 typedef struct struct_message {
     float c;
-    //float d;
+    float d;
 } struct_message;
 
 struct_message myData;
@@ -113,6 +113,7 @@ void loop()                        // --------------- Début de la loop --------
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {                                  // -------- réception données extérieur --------------
   memcpy(&myData, incomingData, sizeof(myData));
   temp_ext = myData.c;
+  humidite = myData.d;
    if (temp_ext > t_max) {t_max = temp_ext;} else if(temp_ext < t_min and t_min > -30 and temp_ext > -50) {t_min = temp_ext;}    // -------- calcul mini et maxi température extérieur ---------------
   myGLCD.setTextColor(TFT_RED,TFT_BLACK);
   //if (temp_ext < 10)  { myGLCD.drawFloat(temp_ext, 1, 220, 90, 6); } else { myGLCD.drawFloat(temp_ext, 1, 210, 90, 6); }  // affiche température extérieur
