@@ -4,16 +4,16 @@
 #include <WiFi.h>
 #include "SPI.h"
 #include "TFT_eSPI.h"
+// station météo upesy tft 3.5 bme280
+
 #include <BME280I2C.h> 
 #include <Wire.h>
-
 #include <time.h>
 const char* ssid       = "DNA-Mokkula-2G-7M3EQF";
 const char* password   = "47890783266";
 const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
-
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
 float humidite;
@@ -23,7 +23,6 @@ typedef struct struct_message {
     float c;
     float d;
 } struct_message;
-
 struct_message myData;
 
 BME280I2C bme;    // Default : forced mode, standby time = 1000 ms
@@ -31,8 +30,6 @@ BME280I2C bme;    // Default : forced mode, standby time = 1000 ms
 #define TFT_GREY 0x7BEF
 
 TFT_eSPI myGLCD = TFT_eSPI();       // Invoke custom library
-int mq2 = 0; int mq2_old = 0;
-int tableau_mq[10];
 
 void setup()                         // ----- Début du setup ----------------
 { 
@@ -52,7 +49,6 @@ void setup()                         // ----- Début du setup ----------------
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
 
- 
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   while(!Serial) {} // Wait
@@ -87,7 +83,6 @@ void setup()                         // ----- Début du setup ----------------
   esp_now_register_recv_cb(OnDataRecv);
   myGLCD.fillScreen(TFT_BLACK);
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
-  // myGLCD.drawString("HEURE", 10,20,4);
   myGLCD.drawString("TEMP IN", 10, 100,4);
   myGLCD.drawString("PRESSION", 10, 180,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4);
@@ -105,17 +100,10 @@ void loop()                        // --------------- Début de la loop --------
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
    BME280::PresUnit presUnit(BME280::PresUnit_Pa);
    bme.read(pres, temp, hum, tempUnit, presUnit);
-          Serial.print("Temperature  ");Serial.print(temp-3);Serial.print("   Humidite  ");Serial.print(hum+9);Serial.print("   Pression. ");Serial.print(pres/100+17);Serial.print("   Qualite AIR  ");Serial.println(mq2);
-  
-  int i = 0; float tableau_mq[10]; int total = 0;                                                            // ----Calcul moyenne PPM -------------------------
-
-    for(i = 0; i < 10; i++) { tableau_mq[i] = analogRead(33)/4;  delay(100); }
-    for (int x = 0;x<10;x++) { total = total + tableau_mq[x]; }
-    mq2 = total / 10;
-
+  // Serial.print("Temperature  ");Serial.print(temp-3);Serial.print("   Humidite  ");Serial.print(hum+9);Serial.print("   Pression. ");Serial.print(pres/100+17);Serial.print("   Qualite AIR  ");Serial.println(mq2);
+ 
   myGLCD.fillScreen(TFT_BLACK);
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
-  // myGLCD.drawString("HEURE", 10,20,4);
   myGLCD.drawString("TEMP IN", 10, 100,4);
   myGLCD.drawString("PRESSION", 10, 180,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4); 
@@ -144,8 +132,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   //myGLCD.setTextColor(TFT_WHITE,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 150, 80, 5); myGLCD.drawFloat(t_min, 1, 150, 110, 5);  //affiche mini maxi
 
   myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawFloat(temp_ext, 1, 130, 340, 8);
-  myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 10, 330, 6); myGLCD.setTextColor(TFT_DARKCYAN,TFT_BLACK); myGLCD.drawFloat(t_min, 1, 10, 400, 6);  //affiche mini maxi
-
+  myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 10, 330, 6); myGLCD.setTextColor(TFT_BLUE,TFT_BLACK); myGLCD.drawFloat(t_min, 1, 10, 400, 6);  //affiche mini maxi
 }
 void printLocalTime()
 {
