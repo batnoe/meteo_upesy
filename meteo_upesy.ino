@@ -1,9 +1,8 @@
-
+// station météo upesy tft 3.5 bme280
 #include <esp_now.h>
 #include <WiFi.h>
 #include "SPI.h"
 #include "TFT_eSPI.h"
-// station météo upesy tft 3.5 bme280
 
 #include <BME280I2C.h> 
 #include <Wire.h>
