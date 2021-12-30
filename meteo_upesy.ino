@@ -108,7 +108,6 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
   myGLCD.drawString("Bernard.picasa14@gmail.com", 160, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
-
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
   myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
   myGLCD.drawNumber(pres/100+18, 200, 170, 6);
