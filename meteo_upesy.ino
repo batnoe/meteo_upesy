@@ -14,7 +14,7 @@ const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
-float humidite;
+float humidite; float temp_moy; int nb;
 long temps;
 
 typedef struct struct_message {
@@ -30,7 +30,7 @@ BME280I2C bme;    // Default : forced mode, standby time = 1000 ms
 TFT_eSPI myGLCD = TFT_eSPI();       // Invoke custom library
 
 void setup()                         // ----- Début du setup ----------------
-{ 
+{ Serial.begin(115200);
   Serial.printf("Connecting to %s ", ssid);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -47,7 +47,6 @@ void setup()                         // ----- Début du setup ----------------
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
 
-  Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   while(!Serial) {} // Wait
   Wire.begin();
@@ -85,7 +84,7 @@ void setup()                         // ----- Début du setup ----------------
   myGLCD.drawString("PRESSION", 10, 180,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4);
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
-  myGLCD.drawString("Bernard.picasa14@gmail.com", 160, 470,2);
+  myGLCD.drawString("Moyenne du jour", 120, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default
   printLocalTime();
   temps = millis();
@@ -98,7 +97,7 @@ void loop()                        // --------------- Début de la loop --------
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
    BME280::PresUnit presUnit(BME280::PresUnit_Pa);
    bme.read(pres, temp, hum, tempUnit, presUnit);
-  // Serial.print("Temperature  ");Serial.print(temp-3);Serial.print("   Humidite  ");Serial.print(hum+9);Serial.print("   Pression. ");Serial.print(pres/100+17);Serial.print("   Qualite AIR  ");Serial.println(mq2);
+  //Serial.print("Temperature  ");Serial.print(temp-3);Serial.print("   Humidite  ");Serial.print(hum+9);Serial.print("   Pression. ");Serial.print(pres/100+17);Serial.print("   Qualite AIR  ");Serial.println(mq2);
  
   myGLCD.fillScreen(TFT_BLACK);
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
@@ -106,10 +105,10 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawString("PRESSION", 10, 180,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4); 
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
-  myGLCD.drawString("Bernard.picasa14@gmail.com", 160, 470,2);
+  myGLCD.drawString("Moyenne du jour", 120, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
-  myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
+  myGLCD.drawFloat(temp -1.8, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
   myGLCD.drawNumber(pres/100+18, 200, 170, 6);
   myGLCD.drawNumber(hum + 4, 250, 250, 6);
   
@@ -122,15 +121,17 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   memcpy(&myData, incomingData, sizeof(myData));
   temp_ext = myData.c;
   humidite = myData.d;
+  // affichage de la moyenne exterieur
+  nb = ++nb;  temp_moy=temp_moy+temp_ext;  myGLCD.setTextColor(TFT_PINK,TFT_BLACK);   myGLCD.drawFloat(temp_moy/nb, 1, 210, 445, 4);
+
    if (temp_ext > t_max) {t_max = temp_ext;} else if(temp_ext < t_min and t_min > -30 and temp_ext > -50) {t_min = temp_ext;}    // -------- calcul mini et maxi température extérieur ---------------
   myGLCD.setTextColor(TFT_BLUE,TFT_BLACK);
   myGLCD.drawNumber(humidite, 160, 250, 6);
-  //if (temp_ext < 10)  { myGLCD.drawFloat(temp_ext, 1, 220, 90, 6); } else { myGLCD.drawFloat(temp_ext, 1, 210, 90, 6); }  // affiche température extérieur
-  //myGLCD.setTextColor(TFT_WHITE,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 150, 80, 5); myGLCD.drawFloat(t_min, 1, 150, 110, 5);  //affiche mini maxi
 
   myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawFloat(temp_ext, 1, 130, 340, 8);
   myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 10, 330, 6); myGLCD.setTextColor(TFT_BLUE,TFT_BLACK); myGLCD.drawFloat(t_min, 1, 10, 400, 6);  //affiche mini maxi
 }
+
 void printLocalTime()
 {
   time_t rawtime;
@@ -143,7 +144,7 @@ void printLocalTime()
   char timeStringBuff[50]; //50 chars should be enough
   strftime(timeStringBuff, sizeof(timeStringBuff), "%d:%m - %H:%M", &timeinfo);
   //print like "const char*"
-  Serial.println(timeStringBuff);
+  //Serial.println(timeStringBuff);
 
   //Optional: Construct String object 
   String asString(timeStringBuff);
