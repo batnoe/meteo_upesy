@@ -4,4 +4,4 @@
 
  Erreur d'effacement du fichier principal
 
- 
+ Ajout de la moyenne du jour
