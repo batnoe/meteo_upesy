@@ -14,7 +14,7 @@ const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
-float humidite; float temp_moy; int nb;
+float humidite; float temp_moy; unsigned short nb;
 long temps;
 
 typedef struct struct_message {
