@@ -9,11 +9,11 @@
 #include <BME280I2C.h> 
 #include <Wire.h>
 #include <time.h>
-const char* ssid       = "DNA-Mokkula-2G-7M3EQF";
+/*const char* ssid       = "DNA-Mokkula-2G-7M3EQF";
 const char* password   = "47890783266";
 const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 3600;
-const int   daylightOffset_sec = 3600;
+const int   daylightOffset_sec = 3600;*/
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
 float humidite;
@@ -33,7 +33,9 @@ TFT_eSPI myGLCD = TFT_eSPI();       // Invoke custom library
 
 void setup()                         // ----- Début du setup ----------------
 { 
-  Serial.printf("Connecting to %s ", ssid);
+  Serial.begin(115200);
+
+  /*Serial.printf("Connecting to %s ", ssid);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
       delay(500);
@@ -47,9 +49,8 @@ void setup()                         // ----- Début du setup ----------------
 
   //disconnect WiFi as it's no longer needed
   WiFi.disconnect(true);
-  WiFi.mode(WIFI_OFF);
+  WiFi.mode(WIFI_OFF);*/
 
-  Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   while(!Serial) {} // Wait
   Wire.begin();
@@ -89,7 +90,7 @@ void setup()                         // ----- Début du setup ----------------
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
   myGLCD.drawString("Bernard.picasa14@gmail.com", 160, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default
-  printLocalTime();
+  //printLocalTime();
   temps = millis();
 }                                   // ---------------- Fin du setup ------------------
 
@@ -116,7 +117,7 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawNumber(pres/100+18, 200, 170, 6);
   myGLCD.drawNumber(hum + 4, 250, 250, 6);
   
-  printLocalTime();
+  //printLocalTime();
   temps = millis() ;}       //  delay (1000*60);
 }                               
 // --------------- Fin de la loop -----------------
@@ -134,7 +135,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawFloat(temp_ext, 1, 130, 340, 8);
   myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 10, 330, 6); myGLCD.setTextColor(TFT_BLUE,TFT_BLACK); myGLCD.drawFloat(t_min, 1, 10, 400, 6);  //affiche mini maxi
 }
-void printLocalTime()
+/*void printLocalTime()
 {
   time_t rawtime;
   struct tm timeinfo;
@@ -151,4 +152,4 @@ void printLocalTime()
   //Optional: Construct String object 
   String asString(timeStringBuff);
   myGLCD.drawString(asString, 15, 15, 6);
-}
+}*/
