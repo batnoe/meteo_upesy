@@ -92,7 +92,7 @@ void setup()                         // ----- Début du setup ----------------
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default
 
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
-  myGLCD.drawString("STATION METEO", 160, 15,2);
+  myGLCD.drawString("STATION  METEO", 160, 50,4);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default
   
   //printLocalTime();
@@ -116,9 +116,12 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
   myGLCD.drawString("Moyenne du jour", 120, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
+  myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
+  myGLCD.drawString("STATION  METEO", 160, 50,4);
+  myGLCD.setTextDatum(TL_DATUM); // Remet text a default
 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
-  myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
+  myGLCD.drawFloat(temp -1.8, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
   myGLCD.drawNumber(pres/100+18, 200, 170, 6);
   myGLCD.drawNumber(hum + 4, 250, 250, 6);
   
