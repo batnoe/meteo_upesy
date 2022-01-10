@@ -90,6 +90,11 @@ void setup()                         // ----- Début du setup ----------------
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
   myGLCD.drawString("Bernard.picasa14@gmail.com", 160, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default
+
+  myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
+  myGLCD.drawString("STATION METEO", 160, 15,2);
+  myGLCD.setTextDatum(TL_DATUM); // Remet text a default
+  
   //printLocalTime();
   temps = millis();
 }                                   // ---------------- Fin du setup ------------------
