@@ -9,7 +9,7 @@
 #include <time.h>
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
-float pres;   float pres_max = pres;   float pres_min = pres;
+float pres;   float pres_max = pres;   float pres_min = 1040;
 
 float humidite; float temp_moy;  int nb;
 long temps; long temps_moy;
