@@ -64,7 +64,7 @@ void setup()                         // ----- Début du setup ----------------
   myGLCD.fillScreen(TFT_BLACK);
   myGLCD.setTextColor(TFT_GREENYELLOW,TFT_BLACK);
   myGLCD.drawString("TEMP IN", 10, 50,4); //100
-  myGLCD.drawString( "PRES", 10, 150,4);  //180
+  //myGLCD.drawString( "PRES", 10, 150,4);  //180
   myGLCD.drawString("HUMIDITE", 10, 260,4);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default
   temps = millis();
@@ -81,17 +81,17 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.fillScreen(TFT_BLACK);
   myGLCD.setTextColor(TFT_GREENYELLOW,TFT_BLACK);
   myGLCD.drawString("TEMP IN", 10, 50,4);
-  myGLCD.drawString("PRES", 10, 150,4);
+  //myGLCD.drawString("PRES", 10, 150,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4); 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
   myGLCD.drawFloat(temp, 1, 210, 40, 6);         //temp_in -3.7 TFT 2.8
-  myGLCD.drawNumber(pres/100+17, 200, 145, 6);   
+  myGLCD.drawFloat(pres/100+16, 1, 150, 145, 6);   
   myGLCD.drawNumber(hum + 4, 250, 250, 6);
 
-  if (pres/100+17 > pres_max) {pres_max=pres/100+17;}
-  if (pres/100+17 < pres_min)  {pres_min=pres/100+17;}
-  myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawNumber(pres_max, 85, 112,6);
-  myGLCD.setTextColor(TFT_YELLOW,TFT_BLACK); myGLCD.drawNumber(pres_min, 85, 178,6);
+  if (pres/100+16 > pres_max) {pres_max=pres/100+16;}
+  if (pres/100+16 < pres_min)  {pres_min=pres/100+16;}
+  myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawNumber(pres_max, 10, 112,6);
+  myGLCD.setTextColor(TFT_YELLOW,TFT_BLACK); myGLCD.drawNumber(pres_min, 10, 178,6);
   temps = millis() ;}       //  delay (1000*60); 
 } 
 // --------------- Fin de la loop -----------------
